@@ -1,29 +1,16 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:tag_gallery/models/app_infos.dart';
 import 'package:tag_gallery/services/grant_permission.dart';
-
-final List<String> defaultDir = [
-  "/storage/emulated/0/Download",
-  "/storage/emulated/0/DCIM",
-  "/storage/emulated/0/Pictures",
-];
-
-final Set<String> supportedFileExtension = {
-  '.jpg',
-  '.jpeg',
-  '.png',
-  '.webp',
-  '.gif',
-  '.mp4',
-  '.mov',
-  '.avi',
-  '.mkv',
-  '.webm',// 추가적인 확장자도 여기에 포함
-};
 
 Future<List<FileSystemEntity>> fetchMediaFiles(Directory dir) async {
   try {
     await grantPermissions();
+    final AppInfos appInfos = AppInfos.instance;
+    final Set<String> supportedMediaExtension = {
+      ...appInfos.supportedVideoExtension,
+      ...appInfos.supportedImageExtension
+    };
 
     List<FileSystemEntity> allFiles = [];
     List<FileSystemEntity> entities = dir.listSync();
@@ -38,7 +25,7 @@ Future<List<FileSystemEntity>> fetchMediaFiles(Directory dir) async {
     // 파일 확장자명 이미지랑 동영상 파일로 필터링
     List<FileSystemEntity> filteredFiles = allFiles.where((file) {
       String path = file.path.toLowerCase();
-      return supportedFileExtension.any((ext)=>path.endsWith(ext));
+      return supportedMediaExtension.any((ext) => path.endsWith(ext));
     }).toList();
 
     return filteredFiles;

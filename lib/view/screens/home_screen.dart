@@ -1,7 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:tag_gallery/common/constant/app_colors.dart';
+import 'package:tag_gallery/models/app_infos.dart';
 
+import '../../models/medias.dart';
 import '../widgets/bottom_bar_item.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -12,6 +14,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  final Media media = Media.instance;
   int navIndex = 0;
 
   void setNavIndex(int index) {
@@ -27,6 +30,13 @@ class _HomeScreenState extends State<HomeScreen> {
         title: Container(
           child: SearchBar(
             backgroundColor: WidgetStatePropertyAll(primarySecColor),
+            leading: Padding(
+              padding: EdgeInsets.symmetric(horizontal: 6),
+              child: Icon(
+                Icons.search,
+                color: primaryColor,
+              ),
+            ),
           ),
           height: 40,
         ),
@@ -36,14 +46,20 @@ class _HomeScreenState extends State<HomeScreen> {
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         color: backColor,
-        child: Center(
-          child: Text(
-            "$navIndex",
-            style: TextStyle(color: textColor),
-          ),
+        padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+        child: GridView.builder(
+          gridDelegate:
+              SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3,mainAxisSpacing: 10,crossAxisSpacing: 10),
+          itemCount: media.files.length,
+          itemBuilder: (context, index) {
+            return Container(
+              child: Image(image: FileImage(media.files[index]),fit: BoxFit.cover,),
+            );
+          },
         ),
       ),
       bottomNavigationBar: BottomAppBar(
+        height: 60,
         color: backColor,
         child: Row(
           mainAxisSize: MainAxisSize.max,
@@ -53,11 +69,13 @@ class _HomeScreenState extends State<HomeScreen> {
               itemText: "사진",
               setIndex: setNavIndex,
               index: 0,
+              navIndex: navIndex,
             ),
             BottomBarItem(
-              itemText: "미디어",
+              itemText: "앨범",
               setIndex: setNavIndex,
               index: 1,
+              navIndex: navIndex,
             ),
           ],
         ),
