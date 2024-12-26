@@ -5,6 +5,7 @@ import 'package:tag_gallery/models/app_infos.dart';
 
 import '../../models/medias.dart';
 import '../widgets/bottom_bar_item.dart';
+import '../widgets/grid_view_item.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -52,9 +53,7 @@ class _HomeScreenState extends State<HomeScreen> {
               SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3,mainAxisSpacing: 10,crossAxisSpacing: 10),
           itemCount: media.files.length,
           itemBuilder: (context, index) {
-            return Container(
-              child: Image(image: FileImage(media.files[index]),fit: BoxFit.cover,),
-            );
+            return GridViewItem(index: index);
           },
         ),
       ),
