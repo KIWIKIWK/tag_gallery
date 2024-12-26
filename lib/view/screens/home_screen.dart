@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:tag_gallery/common/constant/app_colors.dart';
 import 'package:tag_gallery/models/app_infos.dart';
+import 'package:tag_gallery/view/widgets/appbar_items.dart';
 
 import '../../models/medias.dart';
 import '../widgets/bottom_bar_item.dart';
@@ -17,10 +18,24 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   final Media media = Media.instance;
   int navIndex = 0;
+  bool selectMode = false;
+  List<File> selectedFile = [];
 
   void setNavIndex(int index) {
     setState(() {
       navIndex = index;
+    });
+  }
+
+  void addSelectedFile(File file){
+    setState(() {
+      selectedFile.add(file);
+    });
+  }
+
+  void resetSelectedFile(){
+    setState(() {
+      selectedFile = [];
     });
   }
 
@@ -29,16 +44,7 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Container(
-          child: SearchBar(
-            backgroundColor: WidgetStatePropertyAll(primarySecColor),
-            leading: Padding(
-              padding: EdgeInsets.symmetric(horizontal: 6),
-              child: Icon(
-                Icons.search,
-                color: primaryColor,
-              ),
-            ),
-          ),
+          child: AppbarItems(),
           height: 40,
         ),
         backgroundColor: backColor,
@@ -47,10 +53,10 @@ class _HomeScreenState extends State<HomeScreen> {
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         color: backColor,
-        padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
+        padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
         child: GridView.builder(
-          gridDelegate:
-              SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 3,mainAxisSpacing: 10,crossAxisSpacing: 10),
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3, mainAxisSpacing: 10, crossAxisSpacing: 10),
           itemCount: media.files.length,
           itemBuilder: (context, index) {
             return GridViewItem(index: index);

@@ -40,7 +40,7 @@ final GoRouter _router = GoRouter(
           path: 'photo',
           name: 'photo_view',
           builder: (context, state) => PhotoViewScreen(
-            index: state.extra as int,
+            currentIndex: state.extra as int,
           ),
         ),
       ],
