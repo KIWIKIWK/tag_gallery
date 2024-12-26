@@ -1,6 +1,5 @@
 import 'dart:io';
 
-import 'package:flutter/cupertino.dart';
 import 'package:tag_gallery/models/app_infos.dart';
 import 'package:tag_gallery/services/fetch_medias.dart';
 

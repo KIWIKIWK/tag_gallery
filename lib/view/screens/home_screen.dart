@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:tag_gallery/common/constant/app_colors.dart';
-import 'package:tag_gallery/models/app_infos.dart';
 import 'package:tag_gallery/view/widgets/appbar_items.dart';
 
 import '../../models/medias.dart';
