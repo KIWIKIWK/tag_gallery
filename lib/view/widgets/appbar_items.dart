@@ -1,15 +1,35 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../common/constant/app_colors.dart';
+import '../../provider/search_text_provider.dart';
 
-class AppbarItems extends StatelessWidget implements PreferredSizeWidget {
+class AppbarItems extends ConsumerStatefulWidget implements PreferredSizeWidget {
   const AppbarItems({
     super.key,
   });
 
   @override
-  // TODO: implement preferredSize
+  ConsumerState<AppbarItems> createState() => _AppbarItemsState();
+
+  @override
   Size get preferredSize => Size.fromHeight(56);
+}
+
+class _AppbarItemsState extends ConsumerState<AppbarItems> {
+  late final TextEditingController _searchTextEditingController;
+
+  @override
+  void initState() {
+    super.initState();
+    _searchTextEditingController = TextEditingController();
+  }
+
+  @override
+  void dispose() {
+    _searchTextEditingController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -20,6 +40,10 @@ class AppbarItems extends StatelessWidget implements PreferredSizeWidget {
         child: Stack(
           children: [
             SearchBar(
+              controller: _searchTextEditingController,
+              onChanged: (text){
+                ref.read(searchTextProvider.notifier).state = text.trim();
+              },
               padding: WidgetStatePropertyAll(EdgeInsets.only(right: 50)),
               backgroundColor: WidgetStatePropertyAll(primarySecColor),
               leading: Padding(

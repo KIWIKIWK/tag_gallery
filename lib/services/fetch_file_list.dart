@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 
 import '../models/app_infos.dart';
-import '../models/file_list.dart';
+import '../models/file_item.dart';
 import 'fetch_medias.dart';
 
 List<FileItem> fetchFiles() {

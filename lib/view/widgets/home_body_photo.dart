@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tag_gallery/provider/search_text_provider.dart';
 
 import '../../common/constant/app_colors.dart';
 import '../../provider/file_list_provider.dart';
@@ -15,7 +16,8 @@ class HomeBodyPhoto extends ConsumerStatefulWidget {
 class _HomeBodyPhotoState extends ConsumerState<HomeBodyPhoto> {
   @override
   Widget build(BuildContext context) {
-    final fileList = ref.watch(fileListProvider);
+    final fileList = ref.watch(fileItemListProvider);
+    final searchText = ref.watch(searchTextProvider);
 
     return Container(
       height: MediaQuery.of(context).size.height,

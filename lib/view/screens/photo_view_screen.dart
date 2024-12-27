@@ -36,7 +36,7 @@ class _PhotoViewScreenState extends ConsumerState<PhotoViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final fileList = ref.watch(fileListProvider);
+    final fileList = ref.watch(fileItemListProvider);
 
     return Scaffold(
       body: Stack(

@@ -6,6 +6,7 @@ class HomeFAB extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+
     return Container(
       padding: EdgeInsets.symmetric(vertical: 10,horizontal: 10),
       width: 70,
@@ -15,7 +16,8 @@ class HomeFAB extends StatelessWidget {
           borderRadius: BorderRadius.circular(35),
         ),
         backgroundColor: primaryColor,
-        onPressed: () {},
+        onPressed: () {
+        },
         child: Icon(
           Icons.add,
           size: 24,

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tag_gallery/common/constant/app_colors.dart';
-import 'package:tag_gallery/services/file_list_methods.dart';
+import 'package:tag_gallery/services/file_list_services.dart';
 
 import '../../provider/file_list_provider.dart';
 
@@ -14,7 +14,7 @@ class AppbarSelectMode extends ConsumerWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final fileListState = ref.watch(fileListProvider);
+    final fileListState = ref.watch(fileItemListProvider);
 
     return PopScope(
       canPop: false,
@@ -22,7 +22,7 @@ class AppbarSelectMode extends ConsumerWidget implements PreferredSizeWidget {
         debugPrint("${didPop.toString()}");
         if(!didPop){ // 왠진 모르겟는데 뒤로가기 클릭되면 didpop이 false로 나옴
           ref.read(selectModeProvider.notifier).toggleSelectMode();
-          ref.read(fileListProvider.notifier).resetFilesSelected();
+          ref.read(fileItemListProvider.notifier).resetFilesSelected();
         }
       } ,
       child: AppBar(
@@ -31,7 +31,7 @@ class AppbarSelectMode extends ConsumerWidget implements PreferredSizeWidget {
         leading: IconButton(
           onPressed: () {
             ref.read(selectModeProvider.notifier).toggleSelectMode();
-            ref.read(fileListProvider.notifier).resetFilesSelected();
+            ref.read(fileItemListProvider.notifier).resetFilesSelected();
           },
           icon: Icon(Icons.chevron_left,color: textColor,size: 36,),
         ),

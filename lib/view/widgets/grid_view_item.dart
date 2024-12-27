@@ -1,7 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tag_gallery/common/constant/app_colors.dart';
+import 'package:tag_gallery/provider/search_text_provider.dart';
+import 'package:tag_gallery/services/file_list_services.dart';
 
 import '../../provider/file_list_provider.dart';
 
@@ -18,17 +22,18 @@ class _GridViewItemState extends ConsumerState<GridViewItem> {
 
   @override
   Widget build(BuildContext context) {
-    final fileList = ref.watch(fileListProvider);
+    final fileList = ref.watch(fileItemListProvider);
     final selectMode = ref.watch(selectModeProvider);
+    final searchText = ref.watch(searchTextProvider);
 
     return GestureDetector(
       onLongPress: () {
        ref.read(selectModeProvider.notifier).toggleSelectMode();
-       ref.read(fileListProvider.notifier).toggleFileSelected(widget.index);
+       ref.read(fileItemListProvider.notifier).toggleFileSelected(widget.index);
       },
       onTap: () {
         if(selectMode){
-          ref.read(fileListProvider.notifier).toggleFileSelected(widget.index);
+          ref.read(fileItemListProvider.notifier).toggleFileSelected(widget.index);
         } else{
           context.push('/photo', extra: widget.index);
         }
@@ -61,3 +66,4 @@ class _GridViewItemState extends ConsumerState<GridViewItem> {
     );
   }
 }
+
