@@ -9,7 +9,6 @@ class AppbarSelectMode extends ConsumerWidget implements PreferredSizeWidget {
   const AppbarSelectMode({super.key});
 
   @override
-  // TODO: implement preferredSize
   Size get preferredSize => Size.fromHeight(56);
 
   @override
