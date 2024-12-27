@@ -4,6 +4,7 @@ import 'package:tag_gallery/provider/search_text_provider.dart';
 
 import '../../common/constant/app_colors.dart';
 import '../../provider/file_list_provider.dart';
+import '../../services/file_list_services.dart';
 import 'grid_view_item.dart';
 
 class HomeBodyPhoto extends ConsumerStatefulWidget {
@@ -27,7 +28,7 @@ class _HomeBodyPhotoState extends ConsumerState<HomeBodyPhoto> {
       child: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3, mainAxisSpacing: 10, crossAxisSpacing: 10),
-        itemCount: fileList.length,
+        itemCount: searchFileItem(fileList,searchText).length,
         itemBuilder: (context, index) {
           return GridViewItem(
             index: index,

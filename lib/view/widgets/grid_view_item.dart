@@ -24,7 +24,6 @@ class _GridViewItemState extends ConsumerState<GridViewItem> {
   Widget build(BuildContext context) {
     final fileList = ref.watch(fileItemListProvider);
     final selectMode = ref.watch(selectModeProvider);
-    final searchText = ref.watch(searchTextProvider);
 
     return GestureDetector(
       onLongPress: () {

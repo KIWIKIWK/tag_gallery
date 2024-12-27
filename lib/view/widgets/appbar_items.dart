@@ -33,6 +33,9 @@ class _AppbarItemsState extends ConsumerState<AppbarItems> {
 
   @override
   Widget build(BuildContext context) {
+    final searchText = ref.watch(searchTextProvider);
+    _searchTextEditingController.text = searchText;
+
     return AppBar(
       backgroundColor: backColor,
       title: Container(
