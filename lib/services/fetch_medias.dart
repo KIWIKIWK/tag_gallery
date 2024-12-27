@@ -1,11 +1,9 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:tag_gallery/models/app_infos.dart';
-import 'package:tag_gallery/services/grant_permission.dart';
 
-Future<List<FileSystemEntity>> fetchMediaFiles(Directory dir) async {
+List<FileSystemEntity> fetchMediaFiles(Directory dir) {
   try {
-    await grantPermissions();
     final AppInfos appInfos = AppInfos.instance;
     final Set<String> supportedMediaExtension = {
       ...appInfos.supportedVideoExtension,
@@ -18,7 +16,7 @@ Future<List<FileSystemEntity>> fetchMediaFiles(Directory dir) async {
       if (entity is File) {
         allFiles.add(entity);
       } else if (entity is Directory) {
-        allFiles.addAll(await fetchMediaFiles(entity));
+        allFiles.addAll(fetchMediaFiles(entity));
       }
     }
 

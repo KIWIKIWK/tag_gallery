@@ -2,11 +2,11 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:tag_gallery/view/screens/home_screen.dart';
 
-import 'models/medias.dart';
 import 'services/grant_permission.dart';
 import 'view/screens/photo_view_screen.dart';
 
@@ -24,7 +24,6 @@ void main() async {
     }
   }
 
-  await Media.init(); // 미디어 파일 가져오기
   runApp(const MainApp());
 }
 
@@ -53,8 +52,10 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp.router(
-      routerConfig: _router,
+    return ProviderScope(
+      child: MaterialApp.router(
+        routerConfig: _router,
+      ),
     );
   }
 }

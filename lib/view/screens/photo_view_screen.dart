@@ -1,20 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:tag_gallery/common/constant/app_colors.dart';
 
-import '../../models/medias.dart';
+import '../../provider/file_list_provider.dart';
 
-class PhotoViewScreen extends StatefulWidget {
+class PhotoViewScreen extends ConsumerStatefulWidget {
   final int currentIndex;
 
   const PhotoViewScreen({super.key, required this.currentIndex});
 
   @override
-  State<PhotoViewScreen> createState() => _PhotoViewScreenState();
+  ConsumerState<PhotoViewScreen> createState() => _PhotoViewScreenState();
 }
 
-class _PhotoViewScreenState extends State<PhotoViewScreen> {
+class _PhotoViewScreenState extends ConsumerState<PhotoViewScreen> {
   late final PageController _pageController;
   late int currentPageIndex;
 
@@ -35,13 +36,15 @@ class _PhotoViewScreenState extends State<PhotoViewScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final fileList = ref.watch(fileListProvider);
+
     return Scaffold(
       body: Stack(
         children: [
           PhotoViewGallery.builder(
             scrollPhysics: const BouncingScrollPhysics(),
-            itemCount: Media.instance.files.length,
-            onPageChanged: (index){
+            itemCount: fileList.length,
+            onPageChanged: (index) {
               setState(() {
                 currentPageIndex = index;
               });
@@ -49,10 +52,18 @@ class _PhotoViewScreenState extends State<PhotoViewScreen> {
             builder: (context, idx) {
               return PhotoViewGalleryPageOptions(
                 imageProvider: FileImage(
-                  Media.instance.files[idx],
+                  fileList[idx].file,
                 ),
               );
             },
+            loadingBuilder: (context, event) => Container( // 이미지 로딩중일때 화면
+              width: MediaQuery.of(context).size.width,
+              height: MediaQuery.of(context).size.height,
+              color: Colors.black,
+              child: Center(
+                child: CircularProgressIndicator(),
+              ),
+            ),
             pageController: _pageController,
           ),
           Positioned(
@@ -90,7 +101,10 @@ class _PhotoViewScreenState extends State<PhotoViewScreen> {
                   mainAxisSize: MainAxisSize.max,
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
-                    Text("${currentPageIndex}",style: TextStyle(color: textColor,fontSize: 24),),
+                    Text(
+                      "${currentPageIndex}",
+                      style: TextStyle(color: textColor, fontSize: 24),
+                    ),
                   ],
                 ),
               ),

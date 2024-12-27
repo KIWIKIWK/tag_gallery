@@ -1,43 +1,48 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tag_gallery/common/constant/app_colors.dart';
 
-import '../../models/medias.dart';
+import '../../provider/file_list_provider.dart';
 
-class GridViewItem extends StatefulWidget {
+class GridViewItem extends ConsumerStatefulWidget {
   final int index;
 
   const GridViewItem({super.key, required this.index});
 
   @override
-  State<GridViewItem> createState() => _GridViewItemState();
+  ConsumerState<GridViewItem> createState() => _GridViewItemState();
 }
 
-class _GridViewItemState extends State<GridViewItem> {
-  bool selected = false;
+class _GridViewItemState extends ConsumerState<GridViewItem> {
 
   @override
   Widget build(BuildContext context) {
+    final fileList = ref.watch(fileListProvider);
+    final selectMode = ref.watch(selectModeProvider);
+
     return GestureDetector(
       onLongPress: () {
-        // 해당 사진 선택되면서 편집모드 진입
-        setState(() {
-          selected = true;
-        });
+       ref.read(selectModeProvider.notifier).toggleSelectMode();
+       ref.read(fileListProvider.notifier).toggleFileSelected(widget.index);
       },
       onTap: () {
-        context.push('/photo', extra: widget.index);
+        if(selectMode){
+          ref.read(fileListProvider.notifier).toggleFileSelected(widget.index);
+        } else{
+          context.push('/photo', extra: widget.index);
+        }
       },
       child: Stack(
         fit: StackFit.expand,
         children: [
           Positioned(
             child: Image.file(
-              Media.instance.files[widget.index],
+              fileList[widget.index].file,
               fit: BoxFit.cover,
             ),
           ),
-          if(selected)
+          if(fileList[widget.index].selected)
           Positioned(
             right: 10,
             top: 10,

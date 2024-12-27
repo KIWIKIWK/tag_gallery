@@ -1,24 +1,22 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:tag_gallery/common/constant/app_colors.dart';
-import 'package:tag_gallery/view/widgets/appbar_items.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../models/medias.dart';
+import 'package:tag_gallery/common/constant/app_colors.dart';
+import 'package:tag_gallery/provider/file_list_provider.dart';
+import 'package:tag_gallery/view/widgets/appbar_items.dart';
+import 'package:tag_gallery/view/widgets/appbar_select_mode.dart';
 import '../widgets/bottom_bar_item.dart';
 import '../widgets/grid_view_item.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends ConsumerStatefulWidget {
   const HomeScreen({super.key});
 
   @override
-  State<HomeScreen> createState() => _HomeScreenState();
+  ConsumerState<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _HomeScreenState extends State<HomeScreen> {
-  final Media media = Media.instance;
+class _HomeScreenState extends ConsumerState<HomeScreen> {
   int navIndex = 0;
-  bool selectMode = false;
-  List<File> selectedFile = [];
 
   void setNavIndex(int index) {
     setState(() {
@@ -26,28 +24,13 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  void addSelectedFile(File file){
-    setState(() {
-      selectedFile.add(file);
-    });
-  }
-
-  void resetSelectedFile(){
-    setState(() {
-      selectedFile = [];
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
+    final fileList = ref.watch(fileListProvider);
+    final selectMode = ref.watch(selectModeProvider);
+
     return Scaffold(
-      appBar: AppBar(
-        title: Container(
-          child: AppbarItems(),
-          height: 40,
-        ),
-        backgroundColor: backColor,
-      ),
+      appBar: selectMode ? AppbarSelectMode() : AppbarItems(),
       body: Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
@@ -56,9 +39,11 @@ class _HomeScreenState extends State<HomeScreen> {
         child: GridView.builder(
           gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 3, mainAxisSpacing: 10, crossAxisSpacing: 10),
-          itemCount: media.files.length,
+          itemCount: fileList.length,
           itemBuilder: (context, index) {
-            return GridViewItem(index: index);
+            return GridViewItem(
+              index: index,
+            );
           },
         ),
       ),
