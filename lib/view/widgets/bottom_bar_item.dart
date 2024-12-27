@@ -1,19 +1,21 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../common/constant/app_colors.dart';
+import '../../provider/home_navindex_provider.dart';
 
-class BottomBarItem extends StatelessWidget {
-  final int navIndex;
+class BottomBarItem extends ConsumerWidget {
   final int index;
   final String itemText;
-  final Function setIndex;
-  const BottomBarItem({super.key, required this.itemText,required this.setIndex, required this.index, required this.navIndex});
+  const BottomBarItem({super.key, required this.itemText,required this.index});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,WidgetRef ref) {
+    final navIndex = ref.watch(navIndexProvider);
+
     return InkWell(
       onTap: (){
-        setIndex(index);
+        ref.read(navIndexProvider.notifier).setNavIndex(index);
       },
       borderRadius: BorderRadius.circular(25),
       child: Container(
