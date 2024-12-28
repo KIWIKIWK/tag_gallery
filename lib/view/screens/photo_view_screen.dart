@@ -56,7 +56,8 @@ class _PhotoViewScreenState extends ConsumerState<PhotoViewScreen> {
                 ),
               );
             },
-            loadingBuilder: (context, event) => Container( // 이미지 로딩중일때 화면
+            loadingBuilder: (context, event) => Container(
+              // 이미지 로딩중일때 화면
               width: MediaQuery.of(context).size.width,
               height: MediaQuery.of(context).size.height,
               color: Colors.black,
@@ -67,10 +68,10 @@ class _PhotoViewScreenState extends ConsumerState<PhotoViewScreen> {
             pageController: _pageController,
           ),
           Positioned(
+            // 상단에 메뉴들이랑 사진 제목 나오는곳
             top: 0,
             child: SafeArea(
               child: Container(
-                // 상단에 메뉴들이랑 사진 제목 나오는곳
                 width: MediaQuery.of(context).size.width,
                 height: 50,
                 child: Row(
@@ -85,13 +86,52 @@ class _PhotoViewScreenState extends ConsumerState<PhotoViewScreen> {
                         size: 36,
                         color: textColor,
                       ),
-                    )
+                    ),
+                    Expanded(
+                      child: Text(
+                        "${fileList[currentPageIndex].contractionFileName}",
+                        style: TextStyle(color: textColor, fontSize: 18),
+                        overflow: TextOverflow.fade,
+                      ),
+                    ),
+                    IconButton(
+                      onPressed: () {
+                        //파일 정보들 보여주는 다이얼로그 띄어줌.
+                      },
+                      icon: Icon(
+                        Icons.info_outline,
+                        color: textColor,
+                      ),
+                    ),
+                    PopupMenuButton(
+                      color: backSecondaryColor,
+                      menuPadding: EdgeInsets.zero,
+                      itemBuilder: (context) => <PopupMenuEntry>[
+                        PopupMenuItem(
+                          child: Text(
+                            "이름 변경",
+                            style: TextStyle(color: textColor),
+                          ),
+                        ),
+                        PopupMenuItem(
+                          child: Text(
+                            "삭제하기",
+                            style: TextStyle(color: textColor),
+                          ),
+                        ),
+                      ],
+                      icon: Icon(
+                        Icons.more_vert_outlined,
+                        color: textColor,
+                      ),
+                    ),
                   ],
                 ),
               ),
             ),
           ),
           Positioned(
+            // 하단 바 부분
             bottom: 0,
             child: SafeArea(
               child: Container(

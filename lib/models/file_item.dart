@@ -8,4 +8,5 @@ class FileItem{
 
   String get fileName => file.path.split('/').last.split('.').first;
   String get fileExtension => file.path.split('.').last;
+  String get contractionFileName => fileName.length > 15 ? "${fileName.substring(0,15).trim()}..." : fileName;
 }
