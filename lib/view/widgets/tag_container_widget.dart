@@ -15,16 +15,16 @@ class TagContainerWidget extends ConsumerWidget {
   Widget build(BuildContext context,WidgetRef ref) {
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 10),
-      height: 30,
+      height: 24,
       decoration: BoxDecoration(
         color: primaryColor,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         spacing: 8,
         children: [
-          Text("${tag}", style: TextStyle(color: backColor,fontSize: 16),),
+          Text("${tag}", style: TextStyle(color: backColor,fontSize: 14),),
           Material(
             color: Colors.transparent,
             child: InkWell(

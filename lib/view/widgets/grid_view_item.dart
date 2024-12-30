@@ -30,7 +30,7 @@ class _GridViewItemState extends ConsumerState<GridViewItem> {
         if(selectMode){
           ref.read(fileItemListProvider.notifier).toggleFileSelected(widget.index);
         } else{
-          context.push('/photo', extra: widget.index);
+          context.push('/photo?currentIndex=${widget.index}');
         }
       },
       child: Stack(

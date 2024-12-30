@@ -9,6 +9,7 @@ import 'package:tag_gallery/models/album.dart';
 import 'package:tag_gallery/provider/album_list_provider.dart';
 
 import '../../models/file_item.dart';
+import '../dialog/add_tag_button.dart';
 import '../dialog/add_tag_dialog.dart';
 import '../widgets/tag_container_widget.dart';
 
@@ -23,6 +24,12 @@ class _AddAlbumScreenState extends ConsumerState<AddAlbumScreen> {
   late final TextEditingController _titleTextController;
   final Set<String> tags = {};
   List<FileItem> files = [];
+
+  void addTag(Set<String> tag){
+    setState(() {
+      tags.addAll(tag);
+    });
+  }
 
   void removeTag(String tag) {
     setState(() {
@@ -125,40 +132,41 @@ class _AddAlbumScreenState extends ConsumerState<AddAlbumScreen> {
                     "태그",
                     style: TextStyle(color: textColor, fontSize: 18),
                   ),
-                  Material(
-                    color: Colors.transparent,
-                    child: InkWell(
-                      borderRadius: BorderRadius.circular(15),
-                      onTap: () async {
-                        //태그 추가 모달 출력
-                        final String? result = await showDialog<String>(
-                          context: context,
-                          builder: (context) {
-                            return AddTagDialog();
-                          },
-                        );
-                        if (result != null) {
-                          setState(() {
-                            tags.addAll(result.split(','));
-                          });
-                        }
-                        return;
-                      },
-                      child: Container(
-                        child: Icon(
-                          Icons.add,
-                          color: primaryColor,
-                          size: 24,
-                        ),
-                        width: 30,
-                        height: 30,
-                        decoration: BoxDecoration(
-                          border: Border.all(color: primaryColor, width: 2),
-                          borderRadius: BorderRadius.circular(15),
-                        ),
-                      ),
-                    ),
-                  ),
+                  AddTagButton(addTag: addTag,),
+                  // Material(
+                  //   color: Colors.transparent,
+                  //   child: InkWell(
+                  //     borderRadius: BorderRadius.circular(15),
+                  //     onTap: () async {
+                  //       //태그 추가 모달 출력
+                  //       final String? result = await showDialog<String>(
+                  //         context: context,
+                  //         builder: (context) {
+                  //           return AddTagDialog();
+                  //         },
+                  //       );
+                  //       if (result != null) {
+                  //         setState(() {
+                  //           tags.addAll(result.split(','));
+                  //         });
+                  //       }
+                  //       return;
+                  //     },
+                  //     child: Container(
+                  //       child: Icon(
+                  //         Icons.add,
+                  //         color: primaryColor,
+                  //         size: 24,
+                  //       ),
+                  //       width: 30,
+                  //       height: 30,
+                  //       decoration: BoxDecoration(
+                  //         border: Border.all(color: primaryColor, width: 2),
+                  //         borderRadius: BorderRadius.circular(15),
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
                 ],
               ),
             ),

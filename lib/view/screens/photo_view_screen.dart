@@ -3,13 +3,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:tag_gallery/common/constant/app_colors.dart';
+import 'package:tag_gallery/models/file_item.dart';
 
+import '../../models/album.dart';
 import '../../provider/file_list_provider.dart';
 
 class PhotoViewScreen extends ConsumerStatefulWidget {
   final int currentIndex;
-
-  const PhotoViewScreen({super.key, required this.currentIndex});
+  final Album? album;
+  const PhotoViewScreen({super.key, required this.currentIndex, this.album});
 
   @override
   ConsumerState<PhotoViewScreen> createState() => _PhotoViewScreenState();
@@ -18,6 +20,7 @@ class PhotoViewScreen extends ConsumerStatefulWidget {
 class _PhotoViewScreenState extends ConsumerState<PhotoViewScreen> {
   late final PageController _pageController;
   late int currentPageIndex;
+  late final List<FileItem> fileList;
 
   @override
   void initState() {
@@ -25,6 +28,11 @@ class _PhotoViewScreenState extends ConsumerState<PhotoViewScreen> {
     super.initState();
     _pageController = PageController(initialPage: widget.currentIndex);
     currentPageIndex = widget.currentIndex;
+    if(widget.album == null){
+      fileList = ref.watch(fileItemListProvider);
+    } else{
+      fileList = widget.album!.files;
+    }
   }
 
   @override
@@ -36,8 +44,6 @@ class _PhotoViewScreenState extends ConsumerState<PhotoViewScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final fileList = ref.watch(fileItemListProvider);
-
     return Scaffold(
       body: Stack(
         children: [

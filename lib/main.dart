@@ -5,7 +5,9 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:tag_gallery/models/album.dart';
 import 'package:tag_gallery/view/screens/add_album_screen.dart';
+import 'package:tag_gallery/view/screens/album_view_screen.dart';
 import 'package:tag_gallery/view/screens/home_screen.dart';
 
 import 'services/grant_permission.dart';
@@ -39,15 +41,27 @@ final GoRouter _router = GoRouter(
         GoRoute(
           path: 'photo',
           name: 'photo_view',
-          builder: (context, state) => PhotoViewScreen(
-            currentIndex: state.extra as int,
-          ),
+          builder: (context, state) {
+            final currentIndex = int.parse(state.uri.queryParameters['currentIndex']!);
+            return PhotoViewScreen(
+              album: state.extra as Album?,
+              currentIndex: currentIndex,
+            );
+          },
         ),
         GoRoute(
-          path: 'album/create',
-          name: 'add_album',
-          builder: (context, state) => AddAlbumScreen(),
-        ),
+            path: 'album',
+            name: 'album_view',
+            builder: (context, state) => AlbumViewScreen(
+                  createdAt: state.extra as DateTime,
+                ),
+            routes: [
+              GoRoute(
+                path: 'create',
+                name: 'add_album',
+                builder: (context, state) => AddAlbumScreen(),
+              ),
+            ]),
       ],
     ),
   ],
