@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tag_gallery/provider/file_list_provider.dart';
 
 import '../../common/constant/app_colors.dart';
 import '../../provider/search_text_provider.dart';
@@ -71,20 +72,21 @@ class _AppbarItemsState extends ConsumerState<AppbarItems> {
                   menuPadding: EdgeInsets.zero,
                   itemBuilder: (context) => <PopupMenuEntry>[
                     PopupMenuItem(
+                      onTap: (){
+                        ref.read(selectModeProvider.notifier).toggleSelectMode();
+                      },
                       child: Text(
-                        "편집",
+                        "선택하기",
                         style: TextStyle(color: textColor),
                       ),
                     ),
                     PopupMenuItem(
+                      onTap: (){
+                        ref.read(selectModeProvider.notifier).toggleSelectMode();
+                        ref.read(fileItemListProvider.notifier).selectAllFile();
+                      },
                       child: Text(
-                        "awdawd",
-                        style: TextStyle(color: textColor),
-                      ),
-                    ),
-                    PopupMenuItem(
-                      child: Text(
-                        "awdawd",
+                        "모두 선택",
                         style: TextStyle(color: textColor),
                       ),
                     ),

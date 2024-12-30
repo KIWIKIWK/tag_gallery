@@ -17,23 +17,59 @@ class AppbarSelectMode extends ConsumerWidget implements PreferredSizeWidget {
 
     return PopScope(
       canPop: false,
-      onPopInvokedWithResult:(didPop, result) {
+      onPopInvokedWithResult: (didPop, result) {
         debugPrint("${didPop.toString()}");
-        if(!didPop){ // 왠진 모르겟는데 뒤로가기 클릭되면 didpop이 false로 나옴
+        if (!didPop) {
+          // 왠진 모르겟는데 뒤로가기 클릭되면 didpop이 false로 나옴
           ref.read(selectModeProvider.notifier).toggleSelectMode();
           ref.read(fileItemListProvider.notifier).resetFilesSelected();
         }
-      } ,
+      },
       child: AppBar(
         backgroundColor: backColor,
-        title: Text('${countSelectedFiles(fileListState)}개 선택',style: TextStyle(color: textColor,fontSize: 20),),
+        title: Text(
+          '${countSelectedFiles(fileListState)}개 선택',
+          style: TextStyle(color: textColor, fontSize: 20),
+        ),
         leading: IconButton(
           onPressed: () {
             ref.read(selectModeProvider.notifier).toggleSelectMode();
             ref.read(fileItemListProvider.notifier).resetFilesSelected();
           },
-          icon: Icon(Icons.chevron_left,color: textColor,size: 36,),
+          icon: Icon(
+            Icons.chevron_left,
+            color: textColor,
+            size: 36,
+          ),
         ),
+        actions: [
+          PopupMenuButton(
+            color: backSecondaryColor,
+            menuPadding: EdgeInsets.zero,
+            itemBuilder: (context) => <PopupMenuEntry>[
+              PopupMenuItem(
+                onTap: () {
+                },
+                child: Text(
+                  "앨범으로 만들기",
+                  style: TextStyle(color: textColor),
+                ),
+              ),
+              PopupMenuItem(
+                onTap: () {
+                },
+                child: Text(
+                  "앨범에 추가하기",
+                  style: TextStyle(color: textColor),
+                ),
+              ),
+            ],
+            icon: Icon(
+              Icons.more_vert_outlined,
+              color: textColor,
+            ),
+          ),
+        ],
       ),
     );
   }

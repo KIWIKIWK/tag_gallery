@@ -23,6 +23,14 @@ class FileItemListProvider extends StateNotifier<List<FileItem>> {
     state = copyState;
   }
 
+  void selectAllFile(){
+    final copyState = [...state];
+    for(var file in copyState){
+      file.selected = true;
+    }
+    state = copyState;
+  }
+
   void resetFilesSelected() {
     final copyState = [...state];
     for (var file in copyState) {

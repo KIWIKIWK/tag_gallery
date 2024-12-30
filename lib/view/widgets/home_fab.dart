@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:tag_gallery/common/constant/app_colors.dart';
 
 class HomeFAB extends StatelessWidget {
@@ -17,6 +18,7 @@ class HomeFAB extends StatelessWidget {
         ),
         backgroundColor: primaryColor,
         onPressed: () {
+          context.push('/album/create');
         },
         child: Icon(
           Icons.add,

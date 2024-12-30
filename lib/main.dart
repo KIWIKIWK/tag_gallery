@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:permission_handler/permission_handler.dart';
+import 'package:tag_gallery/view/screens/add_album_screen.dart';
 import 'package:tag_gallery/view/screens/home_screen.dart';
 
 import 'services/grant_permission.dart';
@@ -41,6 +42,11 @@ final GoRouter _router = GoRouter(
           builder: (context, state) => PhotoViewScreen(
             currentIndex: state.extra as int,
           ),
+        ),
+        GoRoute(
+          path: 'album/create',
+          name: 'add_album',
+          builder: (context, state) => AddAlbumScreen(),
         ),
       ],
     ),
