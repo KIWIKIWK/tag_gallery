@@ -1,5 +1,6 @@
 class AppInfos {
   AppInfos._internal();
+
   static final AppInfos _instance = AppInfos._internal();
 
   static AppInfos get instance => _instance;
@@ -10,19 +11,19 @@ class AppInfos {
     "/storage/emulated/0/Pictures",
   ];
 
-  final Set<String> supportedImageExtension = {
+  final List<String> supportedImageExtension = [
     '.jpg',
     '.jpeg',
     '.png',
     '.webp',
     '.gif',
-  };
+  ];
 
-  final Set<String> supportedVideoExtension = {
+  final List<String> supportedVideoExtension = [
     '.mp4',
     '.mov',
     '.avi',
     '.mkv',
     '.webm',
-  };
+  ];
 }

@@ -1,20 +1,28 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tag_gallery/common/constant/app_colors.dart';
+import 'package:tag_gallery/models/album.dart';
+import 'package:tag_gallery/provider/album_list_provider.dart';
 
+import '../../models/file_item.dart';
 import '../dialog/add_tag_dialog.dart';
 import '../widgets/tag_container_widget.dart';
 
-class AddAlbumScreen extends StatefulWidget {
+class AddAlbumScreen extends ConsumerStatefulWidget {
   const AddAlbumScreen({super.key});
 
   @override
-  State<AddAlbumScreen> createState() => _AddAlbumScreenState();
+  ConsumerState<AddAlbumScreen> createState() => _AddAlbumScreenState();
 }
 
-class _AddAlbumScreenState extends State<AddAlbumScreen> {
+class _AddAlbumScreenState extends ConsumerState<AddAlbumScreen> {
   late final TextEditingController _titleTextController;
   final Set<String> tags = {};
+  List<FileItem> files = [];
 
   void removeTag(String tag) {
     setState(() {
@@ -36,7 +44,6 @@ class _AddAlbumScreenState extends State<AddAlbumScreen> {
 
   @override
   Widget build(BuildContext context) {
-    debugPrint("${tags.toString()} // 태그 출력");
     return Scaffold(
       appBar: AppBar(
         backgroundColor: backColor,
@@ -56,7 +63,16 @@ class _AddAlbumScreenState extends State<AddAlbumScreen> {
         ),
         actions: [
           IconButton(
-            onPressed: () {},
+            onPressed: () {
+              final title = _titleTextController.text.trim();
+              _titleTextController.clear();
+              if(title.isNotEmpty && tags.isNotEmpty && files.isNotEmpty){
+                ref.read(albumListProvider.notifier).addAlbum(
+                  Album(title: title, tags: tags, files: files),
+                );
+                context.pop();
+              }
+            },
             icon: Icon(
               Icons.send,
               color: primaryColor,
@@ -89,6 +105,7 @@ class _AddAlbumScreenState extends State<AddAlbumScreen> {
                 ),
                 Expanded(
                   child: TextField(
+                    controller: _titleTextController,
                     decoration: InputDecoration(
                       isDense: true,
                       contentPadding: EdgeInsets.zero,
@@ -157,15 +174,72 @@ class _AddAlbumScreenState extends State<AddAlbumScreen> {
                       ))
                   .toList(),
             ),
-            Text(
-              "이미지",
-              style: TextStyle(color: textColor, fontSize: 18),
+            Row(
+              children: [
+                Text(
+                  "이미지",
+                  style: TextStyle(color: textColor, fontSize: 18),
+                ),
+                TextButton(
+                  onPressed: () async {
+                    // 직접 가져온 이미지들로 이미지 선택하는 모달 만들어서 이미지 선택하기
+                    final result = await FilePicker.platform.pickFiles(
+                      allowMultiple: true,
+                      type: FileType.media,
+                    );
+                    if (result != null) {
+                      setState(() {
+                        files.addAll(result.files
+                            .map((file) => FileItem(file: File(file.path!)))
+                            .toList());
+                      });
+                    }
+                  },
+                  child: Text("이미지 추가하기"),
+                ),
+              ],
             ),
-            TextButton(
-              onPressed: () async {
-                // 직접 가져온 이미지들로 이미지 선택하는 모달 만들어서 이미지 선택하기
-              },
-              child: Text("이미지 추가하기"),
+            Expanded(
+              child: GridView.builder(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                    crossAxisCount: 3,
+                    mainAxisSpacing: 10,
+                    crossAxisSpacing: 10),
+                itemCount: files.length,
+                itemBuilder: (context, index) {
+                  return Stack(
+                    fit: StackFit.expand,
+                    children: [
+                      Positioned(
+                        child: InkWell(
+                          onTap: () {
+                            print("이미지 클릭");
+                          },
+                          child: Image.file(
+                            files[index].file,
+                            fit: BoxFit.cover,
+                          ),
+                        ),
+                      ),
+                      Positioned(
+                        top: 0,
+                        right: 0,
+                        child: InkWell(
+                          onTap: () {
+                            setState(() {
+                              files.remove(files[index]);
+                            });
+                          },
+                          child: Icon(
+                            Icons.cancel,
+                            color: Color(0xffe30000),
+                          ),
+                        ),
+                      ),
+                    ],
+                  );
+                },
+              ),
             ),
           ],
         ),

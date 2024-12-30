@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tag_gallery/provider/album_list_provider.dart';
 
 import '../../common/constant/app_colors.dart';
+import 'album_item.dart';
 
 class HomeBodyAlbum extends ConsumerStatefulWidget {
   const HomeBodyAlbum({super.key});
@@ -11,15 +13,34 @@ class HomeBodyAlbum extends ConsumerStatefulWidget {
 }
 
 class _HomeBodyAlbumState extends ConsumerState<HomeBodyAlbum> {
+  late final ScrollController _scrollController;
+  @override
+  void initState() {
+    super.initState();
+    _scrollController = ScrollController();
+  }
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    final albumList = ref.watch(albumListProvider);
+    debugPrint(albumList.toString());
     return Container(
-      height: MediaQuery.of(context).size.height,
-      width: MediaQuery.of(context).size.width,
-      color: backColor,
-      child: Center(
-        child: Text("앨범",style: TextStyle(color: textColor,fontSize: 20),),
-      ),
-    );
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        padding: EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+        color: backColor,
+        child: ListView.builder(
+          controller: _scrollController,
+          scrollDirection: Axis.vertical,
+          itemCount: albumList.length,
+          itemBuilder: (context, index) {
+            return AlbumItem(index:index);
+          },
+        ));
   }
 }
