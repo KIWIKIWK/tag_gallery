@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tag_gallery/provider/album_list_provider.dart';
+import 'package:tag_gallery/provider/search_text_provider.dart';
+import 'package:tag_gallery/services/file_list_services.dart';
 
 import '../../common/constant/app_colors.dart';
 import 'album_item.dart';
@@ -14,11 +16,13 @@ class HomeBodyAlbum extends ConsumerStatefulWidget {
 
 class _HomeBodyAlbumState extends ConsumerState<HomeBodyAlbum> {
   late final ScrollController _scrollController;
+
   @override
   void initState() {
     super.initState();
     _scrollController = ScrollController();
   }
+
   @override
   void dispose() {
     _scrollController.dispose();
@@ -28,18 +32,27 @@ class _HomeBodyAlbumState extends ConsumerState<HomeBodyAlbum> {
   @override
   Widget build(BuildContext context) {
     final albumList = ref.watch(albumListProvider);
+    final searchText = ref.watch(searchTextProvider);
+    final searchType = ref.watch(albumSearchTypeProvider);
 
     return Container(
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
-        padding: EdgeInsets.symmetric(horizontal: 20,vertical: 10),
+        padding: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
         color: backColor,
         child: ListView.builder(
           controller: _scrollController,
           scrollDirection: Axis.vertical,
-          itemCount: albumList.length,
+          itemCount: searchText == ""
+              ? albumList.length
+              : searchAlbumItem(albumList, searchText, searchType).length,
           itemBuilder: (context, index) {
-            return AlbumItem(index:index);
+            return AlbumItem(
+              index: index,
+              album: searchText == ""
+                  ? albumList[index]
+                  : searchAlbumItem(albumList, searchText, searchType)[index],
+            );
           },
         ));
   }

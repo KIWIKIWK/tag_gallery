@@ -4,13 +4,15 @@ import 'package:go_router/go_router.dart';
 import 'package:tag_gallery/common/constant/app_colors.dart';
 import 'package:tag_gallery/view/widgets/tag_container_widget.dart';
 
+import '../../models/album.dart';
 import '../../provider/album_list_provider.dart';
 import '../dialog/add_tag_button.dart';
 
 class AlbumItem extends ConsumerStatefulWidget {
   final int index;
+  final Album album;
 
-  const AlbumItem({super.key, required this.index});
+  const AlbumItem({super.key, required this.index, required this.album});
 
   @override
   ConsumerState<AlbumItem> createState() => _AlbumItemState();
@@ -35,7 +37,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
             splashColor: Color(0x4d5c5c5c),
             onTap: () {
               // 세로로 이미지 뷰어
-              context.push('/album', extra: albumList[widget.index].createdAt);
+              context.push('/album', extra: widget.album.createdAt);
             },
             child: Container(
               width: MediaQuery.of(context).size.width,
@@ -47,7 +49,7 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
                   Expanded(
                     flex: 5,
                     child: Center(
-                      child: Image.file(albumList[widget.index].thumbnail!.file,
+                      child: Image.file(widget.album.thumbnail!.file,
                           fit: BoxFit.fitHeight),
                     ),
                   ),
@@ -60,30 +62,29 @@ class _AlbumItemState extends ConsumerState<AlbumItem> {
                       spacing: 6,
                       children: [
                         Text(
-                          "${albumList[widget.index].title}",
+                          "${widget.album.title}",
                           style: TextStyle(color: textColor, fontSize: 20),
                         ),
                         Wrap(
-                            spacing: 6,
-                            runSpacing: 10,
-                            direction: Axis.horizontal,
-                            alignment: WrapAlignment.start,
-                            children: [
-                              ...albumList[widget.index]
-                                      .tags
-                                      ?.map(
-                                        (tag) => TagContainerWidget(
-                                          tag: tag,
-                                          albumCreatedAt:
-                                              albumList[widget.index].createdAt,
-                                        ),
-                                      )
-                                      .toList() ??
-                                  [],
-                              AddTagButton(
-                                createdAt: albumList[widget.index].createdAt,
-                              ),
-                            ]),
+                          spacing: 6,
+                          runSpacing: 10,
+                          direction: Axis.horizontal,
+                          alignment: WrapAlignment.start,
+                          children: [
+                            ...widget.album.tags
+                                    ?.map(
+                                      (tag) => TagContainerWidget(
+                                        tag: tag,
+                                        albumCreatedAt: widget.album.createdAt,
+                                      ),
+                                    )
+                                    .toList() ??
+                                [],
+                            AddTagButton(
+                              createdAt: widget.album.createdAt,
+                            ),
+                          ],
+                        ),
                       ],
                     ),
                   )

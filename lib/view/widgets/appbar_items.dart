@@ -23,7 +23,6 @@ class AppbarItems extends ConsumerStatefulWidget
 
 class _AppbarItemsState extends ConsumerState<AppbarItems> {
   late final TextEditingController _searchTextEditingController;
-  String albumSearchType = 'title';
 
   @override
   void initState() {
@@ -43,6 +42,7 @@ class _AppbarItemsState extends ConsumerState<AppbarItems> {
     _searchTextEditingController.text = searchText;
     final navIndex = ref.watch(navIndexProvider);
     final sortData = ref.watch(sortDataProvider);
+    final albumSearchType = ref.watch(albumSearchTypeProvider);
 
     return AppBar(
       backgroundColor: backColor,
@@ -78,9 +78,9 @@ class _AppbarItemsState extends ConsumerState<AppbarItems> {
                 child: IconButton(onPressed: (){
                   setState(() {
                     if(albumSearchType == 'title'){
-                      albumSearchType = 'tag';
+                      ref.read(albumSearchTypeProvider.notifier).state = 'tag';
                     } else{
-                      albumSearchType = 'title';
+                      ref.read(albumSearchTypeProvider.notifier).state = 'title';
                     }
                   });
                 }, icon: Icon(albumSearchType == 'title' ? Icons.title : Icons.text_fields,color: primaryColor,))
