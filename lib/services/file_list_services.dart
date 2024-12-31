@@ -10,22 +10,12 @@ int countSelectedFiles(List<FileItem> files) {
   return count;
 }
 
-List<FileItem> searchFileItem(List<FileItem> files, String searchTerm) {
-  if (searchTerm == "") {
-    return files;
-  }
+List<FileItem> searchFileItem(List<FileItem> fileList, String searchTerm) {
   final List<FileItem> searchResult = [];
-  for(final file in files){
+  for(final file in fileList){
     if(file.fileName.contains(searchTerm)){
       searchResult.add(file);
     }
   }
   return searchResult;
-  // return files.map((file) {
-  //   if (file.fileName.contains(searchTerm)) {
-  //     return file;
-  //   } else {
-  //     return null;
-  //   }
-  // }).toList();
 }

@@ -4,9 +4,11 @@ import 'package:go_router/go_router.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:tag_gallery/common/constant/app_colors.dart';
 import 'package:tag_gallery/models/file_item.dart';
+import 'package:tag_gallery/services/file_list_services.dart';
 
 import '../../models/album.dart';
 import '../../provider/file_list_provider.dart';
+import '../../provider/search_text_provider.dart';
 
 class PhotoViewScreen extends ConsumerStatefulWidget {
   final int currentIndex;
@@ -20,7 +22,7 @@ class PhotoViewScreen extends ConsumerStatefulWidget {
 class _PhotoViewScreenState extends ConsumerState<PhotoViewScreen> {
   late final PageController _pageController;
   late int currentPageIndex;
-  late final List<FileItem> fileList;
+  List<FileItem> currentFileList = [];
 
   @override
   void initState() {
@@ -28,11 +30,6 @@ class _PhotoViewScreenState extends ConsumerState<PhotoViewScreen> {
     super.initState();
     _pageController = PageController(initialPage: widget.currentIndex);
     currentPageIndex = widget.currentIndex;
-    if(widget.album == null){
-      fileList = ref.watch(fileItemListProvider);
-    } else{
-      fileList = widget.album!.files;
-    }
   }
 
   @override
@@ -44,12 +41,25 @@ class _PhotoViewScreenState extends ConsumerState<PhotoViewScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final searchText = ref.watch(searchTextProvider);
+    final fileList = ref.watch(fileItemListProvider);
+    if(widget.album == null){
+      if(searchText == ""){
+        currentFileList = fileList;
+      } else{
+        currentFileList = searchFileItem(fileList, searchText);
+      }
+    } else{
+      currentFileList = widget.album!.files;
+    }
+
+
     return Scaffold(
       body: Stack(
         children: [
           PhotoViewGallery.builder(
             scrollPhysics: const BouncingScrollPhysics(),
-            itemCount: fileList.length,
+            itemCount: currentFileList.length,
             onPageChanged: (index) {
               setState(() {
                 currentPageIndex = index;
@@ -58,7 +68,7 @@ class _PhotoViewScreenState extends ConsumerState<PhotoViewScreen> {
             builder: (context, idx) {
               return PhotoViewGalleryPageOptions(
                 imageProvider: FileImage(
-                  fileList[idx].file,
+                  currentFileList[idx].file,
                 ),
               );
             },
@@ -95,7 +105,7 @@ class _PhotoViewScreenState extends ConsumerState<PhotoViewScreen> {
                     ),
                     Expanded(
                       child: Text(
-                        "${fileList[currentPageIndex].contractionFileName}",
+                        "${currentFileList[currentPageIndex].contractionFileName}",
                         style: TextStyle(color: textColor, fontSize: 18),
                         overflow: TextOverflow.fade,
                       ),

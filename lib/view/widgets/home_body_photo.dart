@@ -15,10 +15,12 @@ class HomeBodyPhoto extends ConsumerStatefulWidget {
 }
 
 class _HomeBodyPhotoState extends ConsumerState<HomeBodyPhoto> {
+
+
   @override
   Widget build(BuildContext context) {
-    final fileList = ref.watch(fileItemListProvider);
     final searchText = ref.watch(searchTextProvider);
+    final fileList = ref.watch(fileItemListProvider);
 
     return Container(
       height: MediaQuery.of(context).size.height,
@@ -28,10 +30,11 @@ class _HomeBodyPhotoState extends ConsumerState<HomeBodyPhoto> {
       child: GridView.builder(
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 3, mainAxisSpacing: 10, crossAxisSpacing: 10),
-        itemCount: searchFileItem(fileList,searchText).length,
+        itemCount: searchText == "" ? fileList.length : searchFileItem(fileList,searchText).length,
         itemBuilder: (context, index) {
           return GridViewItem(
             index: index,
+            fileItem: searchText == "" ? fileList[index] : searchFileItem(fileList,searchText)[index],
           );
         },
       ),

@@ -1,4 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:tag_gallery/models/sort_data.dart';
+import '../common/constant/sort_constant.dart';
 import '../models/file_item.dart';
 import '../services/fetch_file_list.dart';
 
@@ -15,11 +17,34 @@ class FileItemListProvider extends StateNotifier<List<FileItem>> {
 
   void fetchFileList() {
     state = fetchFiles();
+    sortFileList(SortData());
   }
 
-  void toggleFileSelected(int index) {
+  void sortFileList(SortData sortData) {
     final copyState = [...state];
-    copyState[index].selected = !copyState[index].selected;
+    if (sortData.sortType == SortType.date) {
+      if (sortData.sortOrder == SortOrder.desc) {
+        copyState.sort((a, b) => b.modifiedDate.compareTo(a.modifiedDate));
+      } else {
+        copyState.sort((a, b) => a.modifiedDate.compareTo(b.modifiedDate));
+      }
+    } else {
+      if (sortData.sortOrder == SortOrder.desc) {
+        copyState.sort((a, b) => b.fileName.compareTo(a.fileName));
+      } else {
+        copyState.sort((a, b) => a.fileName.compareTo(b.fileName));
+      }
+    }
+    state = copyState;
+  }
+
+  void toggleFileSelected(FileItem fileItem) {
+    final copyState = [...state];
+    for(var file in copyState){
+      if(file == fileItem){
+        file.selected = !file.selected;
+      }
+    }
     state = copyState;
   }
 

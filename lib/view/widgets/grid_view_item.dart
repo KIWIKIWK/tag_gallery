@@ -3,12 +3,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:tag_gallery/common/constant/app_colors.dart';
 
+import '../../models/file_item.dart';
 import '../../provider/file_list_provider.dart';
 
 class GridViewItem extends ConsumerStatefulWidget {
   final int index;
-
-  const GridViewItem({super.key, required this.index});
+  final FileItem fileItem;
+  const GridViewItem({super.key, required this.index, required this.fileItem});
 
   @override
   ConsumerState<GridViewItem> createState() => _GridViewItemState();
@@ -24,11 +25,11 @@ class _GridViewItemState extends ConsumerState<GridViewItem> {
     return GestureDetector(
       onLongPress: () {
        ref.read(selectModeProvider.notifier).toggleSelectMode();
-       ref.read(fileItemListProvider.notifier).toggleFileSelected(widget.index);
+       ref.read(fileItemListProvider.notifier).toggleFileSelected(widget.fileItem);
       },
       onTap: () {
         if(selectMode){
-          ref.read(fileItemListProvider.notifier).toggleFileSelected(widget.index);
+          ref.read(fileItemListProvider.notifier).toggleFileSelected(widget.fileItem);
         } else{
           context.push('/photo?currentIndex=${widget.index}');
         }
@@ -38,11 +39,11 @@ class _GridViewItemState extends ConsumerState<GridViewItem> {
         children: [
           Positioned(
             child: Image.file(
-              fileList[widget.index].file,
+              widget.fileItem.file,
               fit: BoxFit.cover,
             ),
           ),
-          if(fileList[widget.index].selected)
+          if(widget.fileItem.selected)
           Positioned(
             right: 10,
             top: 10,

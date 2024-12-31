@@ -7,10 +7,10 @@ import 'package:go_router/go_router.dart';
 import 'package:tag_gallery/common/constant/app_colors.dart';
 import 'package:tag_gallery/models/album.dart';
 import 'package:tag_gallery/provider/album_list_provider.dart';
+import 'package:tag_gallery/provider/sort_data_provider.dart';
 
 import '../../models/file_item.dart';
 import '../dialog/add_tag_button.dart';
-import '../dialog/add_tag_dialog.dart';
 import '../widgets/tag_container_widget.dart';
 
 class AddAlbumScreen extends ConsumerStatefulWidget {
@@ -51,6 +51,8 @@ class _AddAlbumScreenState extends ConsumerState<AddAlbumScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final sortData = ref.watch(sortDataProvider);
+
     return Scaffold(
       appBar: AppBar(
         backgroundColor: backColor,
@@ -77,6 +79,7 @@ class _AddAlbumScreenState extends ConsumerState<AddAlbumScreen> {
                 ref.read(albumListProvider.notifier).addAlbum(
                   Album(title: title, tags: tags, files: files),
                 );
+                ref.read(albumListProvider.notifier).sortAlbum(sortData);
                 context.pop();
               }
             },
