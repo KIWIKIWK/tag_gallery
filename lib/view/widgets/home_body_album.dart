@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:tag_gallery/provider/album_list_provider.dart';
 import 'package:tag_gallery/provider/search_text_provider.dart';
-import 'package:tag_gallery/services/file_list_services.dart';
 
 import '../../common/constant/app_colors.dart';
+import '../../services/search_service.dart';
 import 'album_item.dart';
 
 class HomeBodyAlbum extends ConsumerStatefulWidget {

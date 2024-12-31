@@ -1,16 +1,5 @@
-import 'package:tag_gallery/models/file_item.dart';
-
 import '../models/album.dart';
-
-int countSelectedFiles(List<FileItem> files) {
-  var count = 0;
-  for (var file in files) {
-    if (file.selected) {
-      count++;
-    }
-  }
-  return count;
-}
+import '../models/file_item.dart';
 
 List<FileItem> searchFileItem(List<FileItem> fileList, String searchTerm) {
   final List<FileItem> searchResult = [];

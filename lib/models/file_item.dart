@@ -14,6 +14,11 @@ class FileItem{
     return "${split.join('/')}/";
   }
   DateTime get modifiedDate => file.lastModifiedSync();
-  int get fileSize => file.statSync().size;
+  String get fileSize{
+    final byteSize = file.statSync().size;
+    final kByteSize = (byteSize / 1024).roundToDouble();
+
+    return "${kByteSize}KB";
+  }
   String get contractionFileName => fileName.length > 15 ? "${fileName.substring(0,15).trim()}..." : fileName;
 }

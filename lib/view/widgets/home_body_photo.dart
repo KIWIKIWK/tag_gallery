@@ -4,7 +4,7 @@ import 'package:tag_gallery/provider/search_text_provider.dart';
 
 import '../../common/constant/app_colors.dart';
 import '../../provider/file_list_provider.dart';
-import '../../services/file_list_services.dart';
+import '../../services/search_service.dart';
 import 'grid_view_item.dart';
 
 class HomeBodyPhoto extends ConsumerStatefulWidget {

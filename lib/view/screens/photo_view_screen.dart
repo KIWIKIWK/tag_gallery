@@ -4,11 +4,13 @@ import 'package:go_router/go_router.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:tag_gallery/common/constant/app_colors.dart';
 import 'package:tag_gallery/models/file_item.dart';
-import 'package:tag_gallery/services/file_list_services.dart';
+import 'package:tag_gallery/services/count_select_files.dart';
+import 'package:tag_gallery/view/dialog/file_detail_dialog.dart';
 
 import '../../models/album.dart';
 import '../../provider/file_list_provider.dart';
 import '../../provider/search_text_provider.dart';
+import '../../services/search_service.dart';
 
 class PhotoViewScreen extends ConsumerStatefulWidget {
   final int currentIndex;
@@ -113,6 +115,11 @@ class _PhotoViewScreenState extends ConsumerState<PhotoViewScreen> {
                     IconButton(
                       onPressed: () {
                         //파일 정보들 보여주는 다이얼로그 띄어줌.
+                        showDialog(context: context, builder: (context){
+                          return FileDetailDialog(
+                            fileItem: currentFileList[currentPageIndex],
+                          );
+                        });
                       },
                       icon: Icon(
                         Icons.info_outline,
