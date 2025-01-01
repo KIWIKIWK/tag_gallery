@@ -15,7 +15,23 @@ class HomeBodyPhoto extends ConsumerStatefulWidget {
 }
 
 class _HomeBodyPhotoState extends ConsumerState<HomeBodyPhoto> {
+  late final ScrollController _scrollController;
 
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _scrollController = ScrollController(
+
+    );
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,16 +43,25 @@ class _HomeBodyPhotoState extends ConsumerState<HomeBodyPhoto> {
       width: MediaQuery.of(context).size.width,
       color: backColor,
       padding: EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-      child: GridView.builder(
-        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3, mainAxisSpacing: 10, crossAxisSpacing: 10),
-        itemCount: searchText == "" ? fileList.length : searchFileItem(fileList,searchText).length,
-        itemBuilder: (context, index) {
-          return GridViewItem(
-            index: index,
-            fileItem: searchText == "" ? fileList[index] : searchFileItem(fileList,searchText)[index],
-          );
-        },
+      child: RawScrollbar(
+        interactive: true,
+        thickness: 16,
+        radius: Radius.circular(8),
+        padding: EdgeInsets.symmetric(vertical: 4,horizontal: 4),
+        thumbColor: primaryColor,
+        controller: _scrollController,
+        child: GridView.builder(
+          controller: _scrollController,
+          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 3, mainAxisSpacing: 10, crossAxisSpacing: 10),
+          itemCount: searchText == "" ? fileList.length : searchFileItem(fileList,searchText).length,
+          itemBuilder: (context, index) {
+            return GridViewItem(
+              index: index,
+              fileItem: searchText == "" ? fileList[index] : searchFileItem(fileList,searchText)[index],
+            );
+          },
+        ),
       ),
     );
   }
